@@ -1,9 +1,10 @@
 <template>
     <div class="shift-list-view">
+        <ShiftFilter />
         <div class="flex justify-between">
-            <h1 class="text-3xl font-bold underline">
+            <div class="text-3xl font-bold underline">
                 Shifts
-            </h1>
+            </div>
             <el-button type="primary" plain @click="openFormDrawer">ADD SHIFT</el-button>
         </div>
         <div class="p-5">
@@ -15,9 +16,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useGlobalStore } from '@/stores/global'
 import { computed } from "vue";
-import ShiftCard from "../ShiftCard"
+import { useGlobalStore } from '@/stores/global'
+import ShiftCard from "../ShiftCard";
+import ShiftFilter from "../ShiftFilter"
 
 
 const GlobalStore = useGlobalStore();
