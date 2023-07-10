@@ -4,7 +4,7 @@
       <ShiftListView />
 
       <client-only>
-        <el-drawer v-model="formDrawer" title="Create/Edit Form" direction="rtl">
+        <el-drawer v-model="formDrawer" :title="isCreateForm ? 'Add Shift' : 'Update Shift'" direction="rtl">
           <FormDrawerView v-if="formDrawer" />
         </el-drawer>
       </client-only>
@@ -13,15 +13,17 @@
 </template>
 
 <script lang="ts" setup>
-
+import { computed } from "vue";
 import ShiftListView from "@/components/views/ShiftListView.vue"
 import FormDrawerView from "@/components/views/FormDrawerView.vue"
 import { useGlobalStore } from '@/stores/global'
 import { storeToRefs } from 'pinia'
 
+
 const GlobalStore = useGlobalStore()
 
 const { formDrawer } = storeToRefs(GlobalStore);
+const isCreateForm = computed(() => GlobalStore.getIsCreateForm)
 </script>
 
 

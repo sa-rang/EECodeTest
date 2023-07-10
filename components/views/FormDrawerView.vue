@@ -68,7 +68,7 @@
 
         <el-form-item>
             <el-button type="primary" @click="submitForm(ruleFormRef)">
-                Create
+                {{ isCreateForm ? 'Create' : 'Update' }}
             </el-button>
             <el-button @click="resetForm(ruleFormRef)">Reset</el-button>
         </el-form-item>
@@ -76,7 +76,7 @@
 </template>
   
 <script lang="ts" setup>
-import { reactive, ref, onMounted } from 'vue'
+import { reactive, ref, onMounted, computed } from 'vue'
 import { useGlobalStore } from '@/stores/global'
 import type { FormInstance, FormRules } from 'element-plus'
 import {
@@ -88,7 +88,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { ShiftForm } from "../types"
 
 const GlobalStore = useGlobalStore()
-const { addShiftsData } = GlobalStore
+const { addShiftsData, updateShiftsData, toggleFormDrawer } = GlobalStore
+const editDataHolder = computed(() => GlobalStore.getEditDataHolder)
+const isCreateForm = computed(() => GlobalStore.getIsCreateForm)
+
+
 
 const formSize = ref('default')
 const ruleFormRef = ref<FormInstance>()
@@ -114,22 +118,37 @@ const rules = reactive<FormRules<ShiftForm>>({
     ],
 })
 
+onMounted(() => {
+    if (!isCreateForm.value && editDataHolder.value) {
+        ruleForm.value = JSON.parse(JSON.stringify(editDataHolder.value));
+    }
+});
 
 const submitForm = async (formEl: FormInstance | undefined) => {
     if (!formEl) return
     await formEl.validate((valid, fields) => {
         if (valid) {
-            console.log(uuidv4());
-            console.log('submit!')
             let payload = JSON.parse(JSON.stringify(ruleForm.value));
-            payload.id = uuidv4();
-            addShiftsData(payload);
-            ElNotification({
-                title: 'Success',
-                message: 'Record Added',
-                type: 'success',
-            })
-            ruleFormRef.value?.resetFields();
+
+            if (isCreateForm.value) {
+                payload.id = uuidv4();
+                addShiftsData(payload);
+                ElNotification({
+                    title: 'Success',
+                    message: 'Record Added',
+                    type: 'success',
+                })
+                ruleFormRef.value?.resetFields();
+
+            } else {
+                updateShiftsData(payload);
+                toggleFormDrawer();
+                ElNotification({
+                    title: 'Success',
+                    message: 'Record Updated',
+                    type: 'success',
+                })
+            }
 
         } else {
             console.log('error submit!', fields)

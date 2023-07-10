@@ -21,10 +21,11 @@ import ShiftCard from "../ShiftCard"
 
 
 const GlobalStore = useGlobalStore();
-const { toggleFormDrawer } = GlobalStore
+const { toggleFormDrawer, setIsCreateForm } = GlobalStore
 const shiftsDataList = computed(() => GlobalStore.getShiftsData)
 
 const openFormDrawer = () => {
+    setIsCreateForm(true);
     toggleFormDrawer();
 }
 

@@ -3,7 +3,7 @@
         <template #header>
             <div class="card-header flex justify-between items-center">
                 <span class="text-xl font-bold">{{ shiftDataObj.title }}</span>
-                <el-button type="primary" :icon="Edit" circle />
+                <el-button type="primary" :icon="Edit" circle @click="editDetails(shiftDataObj)" />
             </div>
             <span>{{ shiftDataObj.desc }}</span>
         </template>
@@ -15,6 +15,7 @@
             <span>{{ eachItem.type }}</span>
             <span>{{ eachItem.price }}</span>
         </div>
+
     </el-card>
 </template>
 
@@ -24,13 +25,15 @@ import {
     Edit,
 } from '@element-plus/icons-vue'
 
+import { useGlobalStore } from '@/stores/global'
 import { ShiftForm } from "./types"
 
 interface Props {
     shiftData: ShiftForm
 }
 
-
+const GlobalStore = useGlobalStore()
+const { toggleFormDrawer, setEditDataHolder, setIsCreateForm } = GlobalStore
 
 const props = defineProps<Props>()
 const shiftDataObj = computed(() => props.shiftData)
@@ -40,6 +43,12 @@ const shiftDataObj = computed(() => props.shiftData)
 const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     return new Intl.DateTimeFormat('default', { dateStyle: 'long' }).format(date);
+}
+
+const editDetails = (iData: ShiftForm) => {
+    setIsCreateForm(false);
+    setEditDataHolder(iData);
+    toggleFormDrawer();
 }
 
 </script>

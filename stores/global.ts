@@ -6,7 +6,7 @@ export const useGlobalStore = defineStore('global', {
         formDrawer: false,
         shiftsData: [
             {
-                id: "UUID_Here",
+                id: "6588d0f2-13b0-4c96-855d-0e1a56123736",
                 title: "Base entry",
                 desc: "lotem ipsum",
                 items: [
@@ -20,9 +20,13 @@ export const useGlobalStore = defineStore('global', {
                 ]
             },
         ],
+        isCreateForm: true,
+        editDataHolder: null
     }),
     getters: {
         getShiftsData: (state) => state.shiftsData,
+        getEditDataHolder: (state) => state.editDataHolder,
+        getIsCreateForm: (state) => state.isCreateForm,
     },
 
     actions: {
@@ -31,6 +35,18 @@ export const useGlobalStore = defineStore('global', {
         },
         addShiftsData(payload: ShiftForm) {
             this.shiftsData.push(payload);
+        },
+        updateShiftsData(payload: ShiftForm) {
+            const index = this.shiftsData.findIndex((obj) => obj.id === payload.id);
+            if (index !== -1) {
+                this.shiftsData[index] = payload;
+            }
+        },
+        setEditDataHolder(payload) {
+            this.editDataHolder = payload;
+        },
+        setIsCreateForm(payload: boolean) {
+            this.isCreateForm = payload;
         },
     },
 })
