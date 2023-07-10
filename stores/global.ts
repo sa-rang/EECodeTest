@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia';
+import { ShiftForm } from "@/components/types"
 
 export const useGlobalStore = defineStore('global', {
     state: () => ({
@@ -27,6 +28,9 @@ export const useGlobalStore = defineStore('global', {
     actions: {
         toggleFormDrawer() {
             this.formDrawer = !this.formDrawer
+        },
+        addShiftsData(payload: ShiftForm) {
+            this.shiftsData.push(payload);
         },
     },
 })
